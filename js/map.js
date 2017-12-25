@@ -11,7 +11,7 @@
   var map = document.querySelector('.map'); // общая поле = карта + настройки
   var mapPinMain = map.querySelector('.map__pin--main');
   var locationMainInForm = { // координаты главного маркера-пина
-    x: 495,
+    x: 525,
     y: 330
   };
 
