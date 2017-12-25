@@ -4,6 +4,8 @@
 (function () {
   var MAX_PINS = 5;
   var DEBOUNCE_INTERVAL = 500;
+  var LOW_PRICE = 10000;
+  var HIGH_PRICE = 50000;
   // Находим шаблон маркера в template, который будем копировать
   var mapPinTemplate = document.querySelector('template').content.querySelector('.map__pin');
   var mapPinMain = document.querySelector('.map__pin--main');
@@ -95,11 +97,11 @@
   var selectPriceFilter = function (arr) {
     adsCopy = adsCopy.filter(function (element) {
       if (arr.value === 'middle') {
-        return (element.offer.price < 50000) && (element.offer.price > 10000);
+        return (element.offer.price < HIGH_PRICE) && (element.offer.price > LOW_PRICE);
       } else if (arr.value === 'low') {
-        return element.offer.price <= 10000;
+        return element.offer.price <= LOW_PRICE;
       } else if (arr.value === 'high') {
-        return element.offer.price >= 50000;
+        return element.offer.price >= HIGH_PRICE;
       }
       return true;
     });

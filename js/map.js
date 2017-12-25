@@ -2,17 +2,18 @@
 
 // модуль, который работает с картой
 (function () {
+  var PIN_WIDTH = 40; // ширина иконки
+  var PIN_HEIGHT = 40; // высота иконки пина
+  var POINTER_HEIGHT = 22; // высота стрелки
   var noticeForm = document.querySelector('.notice__form');
   var address = noticeForm.querySelector('#address');
   var formFieldset = document.querySelectorAll('fieldset');
   var map = document.querySelector('.map'); // общая поле = карта + настройки
   var mapPinMain = map.querySelector('.map__pin--main');
   var locationMainInForm = { // координаты главного маркера-пина
-    x: 580,
-    y: 355
+    x: 495,
+    y: 330
   };
-  var pinWidth = 40; // ширина иконки
-  var pinHeight = 40; // высота иконки пина
 
   // функция внесения адрес-координат в форму по умолчанию
   var getAddress = function () {
@@ -43,25 +44,25 @@
       var newX = mapPinMain.offsetLeft - shift.x; // переменная для отображения положения текущего пина по оси абсцисс
       if (newX >= window.data.locationXY.maxX) { // ограничения для пина на кaрте по оси абсцисс
         mapPinMain.style.left = window.data.locationXY.maxX + 'px';
-        locationMainInForm.x = window.data.locationXY.maxX - pinWidth / 2;
+        locationMainInForm.x = window.data.locationXY.maxX - PIN_WIDTH / 2;
       } else if (newX <= window.data.locationXY.minX) {
         mapPinMain.style.left = window.data.locationXY.minX + 'px';
-        locationMainInForm.x = window.data.locationXY.minX - pinWidth / 2;
+        locationMainInForm.x = window.data.locationXY.minX - PIN_WIDTH / 2;
       } else {
         mapPinMain.style.left = newX + 'px'; // отображение текущей координаты х
-        locationMainInForm.x = newX - pinWidth / 2; // отображение координат для вывода в форму
+        locationMainInForm.x = newX - PIN_WIDTH / 2; // отображение координат для вывода в форму
       }
 
       var newY = mapPinMain.offsetTop - shift.y; // переменная для отображения положения текущего пина по оси ординат
       if (newY >= window.data.locationXY.maxY) { // ограничения для пина на крте по оси ординат
         mapPinMain.style.top = window.data.locationXY.maxY + 'px';
-        locationMainInForm.y = window.data.locationXY.maxY - pinHeight / 2;
+        locationMainInForm.y = window.data.locationXY.maxY - PIN_HEIGHT / 2 - POINTER_HEIGHT;
       } else if (newY <= window.data.locationXY.minY) {
         mapPinMain.style.top = window.data.locationXY.minY + 'px';
-        locationMainInForm.y = window.data.locationXY.minY - pinHeight / 2;
+        locationMainInForm.y = window.data.locationXY.minY - PIN_HEIGHT / 2 - POINTER_HEIGHT;
       } else {
         mapPinMain.style.top = newY + 'px'; // отображение текущей координаты у
-        locationMainInForm.y = newY - pinHeight / 2; // отображение координат для вывода в форму
+        locationMainInForm.y = newY - PIN_HEIGHT / 2 - POINTER_HEIGHT; // отображение координат для вывода в форму
       }
 
       getAddress(); // вывод текущих координат главного пина в форму
@@ -92,7 +93,7 @@
   disabledMapAndForms();
 
   // активация карты и формы
-  var onButtonActivateMap = function () {
+  var onPinActivateMap = function () {
     window.pin.init(); // инициализация пинов
     window.pin.addPins(); // выводит пины на карту
     activate(); // активирует карту и форму
@@ -100,19 +101,23 @@
       el.removeAttribute('disabled');
     });
     getAddress(); // внесение адрес-координат в форму
-    mapPinMain.removeEventListener('mouseup', onButtonActivateMap); // удаляет обработчик для предотвращения вызова 1-го попапа при нажатии главного пина
+    mapPinMain.removeEventListener('mouseup', onPinActivateMap); // удаляет обработчик для предотвращения вызова 1-го попапа при нажатии главного пина
+    mapPinMain.removeEventListener('keydown', foo); // удаляет обработчик для предотвращения вызова 1-го попапа при нажатии ENTER главного пина
     mapPinMain.addEventListener('mousedown', onPinMove); // обработчик перетаскивания
   };
 
+  // функция активации при ENTER
+  var foo = function (evt) {
+    if (evt.keyCode === window.util.ENTER_KEYCODE) {
+      onPinActivateMap();
+    }
+  };
+
   // обработчик события на блоке при отпускании кнопки мыши активирует поля и карту
-  mapPinMain.addEventListener('mouseup', onButtonActivateMap);
+  mapPinMain.addEventListener('mouseup', onPinActivateMap);
 
   // обработчик события на блоке при нажатии ENTER
-  mapPinMain.addEventListener('keydown', function (evt) {
-    if (evt.keyCode === window.util.ENTER_KEYCODE) {
-      onButtonActivateMap();
-    }
-  });
+  mapPinMain.addEventListener('keydown', foo);
 
   // обработчик события закрытия попапа и убирает активный класса при ESC
   document.addEventListener('keydown', window.showCard.onPopupEscPress);
