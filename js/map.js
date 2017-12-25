@@ -5,6 +5,12 @@
   var PIN_WIDTH = 40; // ширина иконки
   var PIN_HEIGHT = 40; // высота иконки пина
   var POINTER_HEIGHT = 22; // высота стрелки
+  var locationXY = {
+    MIN_X: 300,
+    MAX_X: 900,
+    MIN_Y: 100,
+    MAX_Y: 500
+  };
   var noticeForm = document.querySelector('.notice__form');
   var address = noticeForm.querySelector('#address');
   var formFieldset = document.querySelectorAll('fieldset');
@@ -41,28 +47,16 @@
         y: moveEvt.clientY
       };
 
-      var newX = mapPinMain.offsetLeft - shift.x; // переменная для отображения положения текущего пина по оси абсцисс
-      if (newX >= window.data.locationXY.maxX) { // ограничения для пина на кaрте по оси абсцисс
-        mapPinMain.style.left = window.data.locationXY.maxX + 'px';
-        locationMainInForm.x = window.data.locationXY.maxX;
-      } else if (newX <= window.data.locationXY.minX) {
-        mapPinMain.style.left = window.data.locationXY.minX + 'px';
-        locationMainInForm.x = window.data.locationXY.minX;
-      } else {
-        mapPinMain.style.left = newX + 'px'; // отображение текущей координаты х
-        locationMainInForm.x = newX + PIN_WIDTH / 2; // отображение координат для вывода в форму
-      }
+      var coordX = mapPinMain.offsetLeft - shift.x; // переменная для отображения положения текущего пина по оси абсцисс
+      var coordY = mapPinMain.offsetTop - shift.y;
+      var coordForFormX = coordX + PIN_WIDTH / 2;
+      var coordForFormY = coordY + PIN_HEIGHT / 2 + POINTER_HEIGHT;
 
-      var newY = mapPinMain.offsetTop - shift.y; // переменная для отображения положения текущего пина по оси ординат
-      if (newY >= window.data.locationXY.maxY) { // ограничения для пина на крте по оси ординат
-        mapPinMain.style.top = window.data.locationXY.maxY + 'px';
-        locationMainInForm.y = window.data.locationXY.maxY;
-      } else if (newY <= window.data.locationXY.minY) {
-        mapPinMain.style.top = window.data.locationXY.minY + 'px';
-        locationMainInForm.y = window.data.locationXY.minY;
-      } else {
-        mapPinMain.style.top = newY + 'px'; // отображение текущей координаты у
-        locationMainInForm.y = newY - PIN_HEIGHT / 2 - POINTER_HEIGHT; // отображение координат для вывода в форму
+      if (coordX >= (locationXY.MIN_X - PIN_WIDTH / 2) && coordX <= (locationXY.MAX_X - PIN_WIDTH / 2) && coordY >= (locationXY.MIN_Y - PIN_WIDTH / 2 + POINTER_HEIGHT) && coordY <= locationXY.MAX_X - PIN_WIDTH / 2 + POINTER_HEIGHT) {
+        mapPinMain.style.left = coordX + 'px';
+        mapPinMain.style.top = coordY + 'px';
+        locationMainInForm.x = coordForFormX; // отображение координат для вывода в форму
+        locationMainInForm.y = coordForFormY;
       }
 
       getAddress(); // вывод текущих координат главного пина в форму
