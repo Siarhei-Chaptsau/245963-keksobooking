@@ -44,22 +44,22 @@
       var newX = mapPinMain.offsetLeft - shift.x; // переменная для отображения положения текущего пина по оси абсцисс
       if (newX >= window.data.locationXY.maxX) { // ограничения для пина на кaрте по оси абсцисс
         mapPinMain.style.left = window.data.locationXY.maxX + 'px';
-        locationMainInForm.x = window.data.locationXY.maxX - PIN_WIDTH / 2;
+        locationMainInForm.x = window.data.locationXY.maxX;
       } else if (newX <= window.data.locationXY.minX) {
         mapPinMain.style.left = window.data.locationXY.minX + 'px';
-        locationMainInForm.x = window.data.locationXY.minX - PIN_WIDTH / 2;
+        locationMainInForm.x = window.data.locationXY.minX;
       } else {
         mapPinMain.style.left = newX + 'px'; // отображение текущей координаты х
-        locationMainInForm.x = newX - PIN_WIDTH / 2; // отображение координат для вывода в форму
+        locationMainInForm.x = newX + PIN_WIDTH / 2; // отображение координат для вывода в форму
       }
 
       var newY = mapPinMain.offsetTop - shift.y; // переменная для отображения положения текущего пина по оси ординат
       if (newY >= window.data.locationXY.maxY) { // ограничения для пина на крте по оси ординат
         mapPinMain.style.top = window.data.locationXY.maxY + 'px';
-        locationMainInForm.y = window.data.locationXY.maxY - PIN_HEIGHT / 2 - POINTER_HEIGHT;
+        locationMainInForm.y = window.data.locationXY.maxY;
       } else if (newY <= window.data.locationXY.minY) {
         mapPinMain.style.top = window.data.locationXY.minY + 'px';
-        locationMainInForm.y = window.data.locationXY.minY - PIN_HEIGHT / 2 - POINTER_HEIGHT;
+        locationMainInForm.y = window.data.locationXY.minY;
       } else {
         mapPinMain.style.top = newY + 'px'; // отображение текущей координаты у
         locationMainInForm.y = newY - PIN_HEIGHT / 2 - POINTER_HEIGHT; // отображение координат для вывода в форму
@@ -94,6 +94,9 @@
 
   // активация карты и формы
   var onPinActivateMap = function () {
+    if (window.data.get() === '') { // проверка на то, чтобы успелись загрузиться данные
+      return;
+    }
     window.pin.init(); // инициализация пинов
     window.pin.addPins(); // выводит пины на карту
     activate(); // активирует карту и форму

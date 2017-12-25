@@ -10,7 +10,7 @@
     'minY': 100,
     'maxY': 500
   };
-  var ads = []; // переменная объявлений
+  var ads; // переменная объявлений
   window.backend.load(window.backend.successHandler, window.backend.errorHandler); // загрузка данных с сервера сразу
 
   // возвращает переменную объявлений
