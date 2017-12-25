@@ -161,6 +161,7 @@
   var updateMap = function () {
     deletePins();
     window.showCard.hideArticle();
+    window.showCard.removeActive();
     selectTypeFilter(filterHousingType);
     selectPriceFilter(filterPrice);
     selectRoomsFilter(filterRooms);

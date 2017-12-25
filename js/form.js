@@ -132,6 +132,7 @@
     window.backend.save(new FormData(noticeForm), function () { // добавление данных формы для отправки через добавление в конструктор new FormData()
       successSending(); // уведомление об успешной отправке формы
       noticeForm.reset(); // при успешной загрузке данных на сервер сбрасывем значений формы
+      synchronizeRoomsAndCapacities();
       window.map.getAddress(); // внесение адрес-координат в форму
     }, window.backend.errorHandler);
     evt.preventDefault(); // отменим действие формы по умолчанию

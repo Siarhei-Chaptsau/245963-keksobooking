@@ -96,6 +96,7 @@
     renderArticle: renderArticle,
     onPopupEscPress: onPopupEscPress,
     renderNextPopap: renderNextPopap,
-    hideArticle: hideArticle
+    hideArticle: hideArticle,
+    removeActive: removeActive
   };
 })();
