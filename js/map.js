@@ -98,9 +98,9 @@
     window.pin.init(); // инициализация пинов
     window.pin.addPins(); // выводит пины на карту
     activate(); // активирует карту и форму
-    for (var i = 0; i < formFieldset.length; i++) {
-      formFieldset[i].removeAttribute('disabled');
-    }
+    formFieldset.forEach(function (el) {
+      el.removeAttribute('disabled');
+    });
     getAddress(); // внесение адрес-координат в форму
     mapPinMain.removeEventListener('mouseup', onButtonActivateMap); // удаляет обработчик для предотвращения вызова 1-го попапа при нажатии главного пина
     mapPinMain.addEventListener('mousedown', onButtonDrop); // обработчик перетаскивания
