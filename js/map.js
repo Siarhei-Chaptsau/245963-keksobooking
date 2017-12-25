@@ -17,8 +17,8 @@
   var map = document.querySelector('.map'); // общая поле = карта + настройки
   var mapPinMain = map.querySelector('.map__pin--main');
   var locationMainInForm = { // координаты главного маркера-пина
-    x: 525,
-    y: 330
+    x: 615,
+    y: 415
   };
 
   // функция внесения адрес-координат в форму по умолчанию
@@ -52,7 +52,7 @@
       var coordForFormX = coordX + PIN_WIDTH / 2;
       var coordForFormY = coordY + PIN_HEIGHT / 2 + POINTER_HEIGHT;
 
-      if (coordX >= (locationXY.MIN_X - PIN_WIDTH / 2) && coordX <= (locationXY.MAX_X - PIN_WIDTH / 2) && coordY >= (locationXY.MIN_Y - PIN_WIDTH / 2 + POINTER_HEIGHT) && coordY <= locationXY.MAX_X - PIN_WIDTH / 2 + POINTER_HEIGHT) {
+      if (coordX >= (locationXY.MIN_X - PIN_WIDTH / 2) && coordX <= (locationXY.MAX_X - PIN_WIDTH / 2) && coordY >= (locationXY.MIN_Y - PIN_WIDTH / 2 - POINTER_HEIGHT) && coordY <= (locationXY.MAX_Y - PIN_WIDTH / 2 - POINTER_HEIGHT)) {
         mapPinMain.style.left = coordX + 'px';
         mapPinMain.style.top = coordY + 'px';
         locationMainInForm.x = coordForFormX; // отображение координат для вывода в форму
