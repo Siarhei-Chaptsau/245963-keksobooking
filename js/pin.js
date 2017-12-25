@@ -185,7 +185,6 @@
 
   // перенос в глобальную область видимости
   window.pin = {
-    fragment: fragment,
     renderPoint: renderPoint,
     init: init,
     addPins: addPins,
