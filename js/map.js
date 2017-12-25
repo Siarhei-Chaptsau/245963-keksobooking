@@ -20,7 +20,7 @@
   };
 
   // функция перетаскивания
-  var onButtonDrop = function () {
+  var onPinMove = function () {
     mapPinMain.addEventListener('mousedown', function (evt) {
       evt.preventDefault();
       var startCoords = {
@@ -103,7 +103,7 @@
     });
     getAddress(); // внесение адрес-координат в форму
     mapPinMain.removeEventListener('mouseup', onButtonActivateMap); // удаляет обработчик для предотвращения вызова 1-го попапа при нажатии главного пина
-    mapPinMain.addEventListener('mousedown', onButtonDrop); // обработчик перетаскивания
+    mapPinMain.addEventListener('mousedown', onPinMove); // обработчик перетаскивания
   };
 
   // обработчик события на блоке при отпускании кнопки мыши активирует поля и карту

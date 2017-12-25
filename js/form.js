@@ -3,6 +3,7 @@
 // модуль, который работает с формой объявления
 (function () {
   var noticeForm = document.querySelector('.notice__form');
+  var formReset = document.querySelector('.form__reset');
   var checkIn = noticeForm.querySelector('#timein');
   var checkOut = noticeForm.querySelector('#timeout');
   var priceForNight = noticeForm.querySelector('#price');
@@ -114,6 +115,7 @@
     nodeDiv.style.fontSize = '20px';
     nodeDiv.textContent = 'Данные успешно отправлены.';
     document.body.insertAdjacentElement('afterbegin', nodeDiv);
+    nodeDiv.classList.remove('hidden');
   };
 
   // закрытие сообщения об отправке данных ESC
@@ -126,6 +128,15 @@
   // закрытие сообщения об отправке данных при клике
   nodeDiv.addEventListener('click', function (evt) {
     evt.target.classList.add('hidden');
+  });
+
+  // заполнить форму при нажатии reset
+  formReset.addEventListener('click', function (evt) {
+    evt.preventDefault();
+    noticeForm.reset();
+    window.map.getAddress(); // внесение адрес-координат в форму
+    synchronizeRoomsAndCapacities();
+    nodeDiv.classList.add('hidden');
   });
 
   noticeForm.addEventListener('submit', function (evt) {
