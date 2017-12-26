@@ -3,6 +3,8 @@
 // модуль, который работает с формой объявления
 (function () {
   var noticeForm = document.querySelector('.notice__form');
+  var formReset = document.querySelector('.form__reset');
+  var formElement = document.querySelector('.form__element');
   var checkIn = noticeForm.querySelector('#timein');
   var checkOut = noticeForm.querySelector('#timeout');
   var priceForNight = noticeForm.querySelector('#price');
@@ -67,13 +69,13 @@
     return valuesKeys;
   };
 
-  // обработчик cобытия изменения мин цены для типов жилья
-  typeOfAccommodation.addEventListener('change', function () {
+  var onPricesSynchronizeWithAccommodations = function () {
     window.synchronizeFields(priceForNight, typeOfAccommodation, getValues(keysOfMinPriceForTypes, minPriceForTypes), keysOfMinPriceForTypes, syncValueWithMin);
-  });
+  };
+  typeOfAccommodation.addEventListener('change', onPricesSynchronizeWithAccommodations);
 
-  // обработчиками валидации введенной суммы
-  priceForNight.addEventListener('invalid', function () {
+  // функция валидации при внесении цены
+  var onPriceValidate = function () {
     getBorderColor(priceForNight);
     if (priceForNight.validity.rangeUnderflow) {
       priceForNight.setCustomValidity('Цена жилья ниже рекомендованной');
@@ -85,11 +87,11 @@
       priceForNight.setCustomValidity('');
       resetBorderColor(priceForNight);
     }
-  });
+  };
 
   // ----- обратобчик события соответствия кол-ва комнат и мест ----- //
 
-  var synchronizeRoomsAndCapacities = function () {
+  var onCapacitiesSynchronizeWithRooms = function () {
     if (capacity.options.length > 0) {
       [].forEach.call(capacity.options, function (item) {
         item.selected = (сapacityOfRooms[roomNumber.value][0] === item.value) ? true : false; // пример: сapacityOfRooms[2][0] = '3', - третему и второму и первому дочерн эл-тов capacity.options
@@ -97,9 +99,9 @@
       });
     }
   };
-  synchronizeRoomsAndCapacities();
 
-  roomNumber.addEventListener('change', synchronizeRoomsAndCapacities);
+  onCapacitiesSynchronizeWithRooms();
+  roomNumber.addEventListener('change', onCapacitiesSynchronizeWithRooms);
 
   // ----- Обработчик для работы с сервером ----- //
 
@@ -114,12 +116,17 @@
     nodeDiv.style.fontSize = '20px';
     nodeDiv.textContent = 'Данные успешно отправлены.';
     document.body.insertAdjacentElement('afterbegin', nodeDiv);
+    nodeDiv.classList.remove('hidden');
+  };
+
+  var hideMessage = function () {
+    nodeDiv.classList.add('hidden');
   };
 
   // закрытие сообщения об отправке данных ESC
   document.addEventListener('keydown', function (evt) {
     if (evt.keyCode === window.util.ESC_KEYCODE) {
-      nodeDiv.classList.add('hidden');
+      hideMessage();
     }
   });
 
@@ -128,12 +135,28 @@
     evt.target.classList.add('hidden');
   });
 
+  // закрытие сообщения об отправке данных при смене любого поля
+  formElement.addEventListener('change', hideMessage);
+
+  // заполнить форму при нажатии reset
+  formReset.addEventListener('click', function (evt) {
+    evt.preventDefault();
+    noticeForm.reset();
+    window.map.getAddress(); // внесение адрес-координат в форму
+    onCapacitiesSynchronizeWithRooms();
+    hideMessage();
+    onPricesSynchronizeWithAccommodations(); // синхронизация цены и типа жилья
+  });
+
   noticeForm.addEventListener('submit', function (evt) {
+    evt.preventDefault(); // отменим действие формы по умолчанию
     window.backend.save(new FormData(noticeForm), function () { // добавление данных формы для отправки через добавление в конструктор new FormData()
+      priceForNight.addEventListener('invalid', onPriceValidate); // обработчик валидации введенной суммы при отправке формы
       successSending(); // уведомление об успешной отправке формы
       noticeForm.reset(); // при успешной загрузке данных на сервер сбрасывем значений формы
+      onCapacitiesSynchronizeWithRooms();
+      onPricesSynchronizeWithAccommodations(); // синхронизация цены и типа жилья
       window.map.getAddress(); // внесение адрес-координат в форму
     }, window.backend.errorHandler);
-    evt.preventDefault(); // отменим действие формы по умолчанию
   });
 })();

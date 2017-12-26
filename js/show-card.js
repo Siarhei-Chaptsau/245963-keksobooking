@@ -49,7 +49,7 @@
     return '<li class="feature feature--' + item + '"></li>';
   };
 
-  // создаём DOM-элемент объявление-попап, заполняя его данными из объекта objectOfads
+  // создаём DOM-элемент объявление-попап, заполняя его данными из сервера
   var renderArticle = function (ad) {
     var articleElement = window.card.get(); // получили шаблон объявления
     articleElement.querySelector('.popup__avatar').src = ad.author.avatar; // Заменяем аватарку пользователя
@@ -96,6 +96,7 @@
     renderArticle: renderArticle,
     onPopupEscPress: onPopupEscPress,
     renderNextPopap: renderNextPopap,
-    hideArticle: hideArticle
+    hideArticle: hideArticle,
+    removeActive: removeActive
   };
 })();
