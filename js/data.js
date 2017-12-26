@@ -3,7 +3,7 @@
 (function () {
   var CHECKINS = ['12:00', '13:00', '14:00'];
   var CHECKOUTS = ['12:00', '13:00', '14:00'];
-  var ads; // переменная объявлений
+  var ads = ''; // переменная объявлений
   window.backend.load(window.backend.successHandler, window.backend.errorHandler); // загрузка данных с сервера сразу
 
   // возвращает переменную объявлений

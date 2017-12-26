@@ -58,7 +58,6 @@
         locationMainInForm.x = coordForFormX; // отображение координат для вывода в форму
         locationMainInForm.y = coordForFormY;
       }
-
       getAddress(); // вывод текущих координат главного пина в форму
     };
 
@@ -99,12 +98,12 @@
     });
     getAddress(); // внесение адрес-координат в форму
     mapPinMain.removeEventListener('mouseup', onPinActivateMap); // удаляет обработчик для предотвращения вызова 1-го попапа при нажатии главного пина
-    mapPinMain.removeEventListener('keydown', foo); // удаляет обработчик для предотвращения вызова 1-го попапа при нажатии ENTER главного пина
+    mapPinMain.removeEventListener('keydown', onEnterActivateMap); // удаляет обработчик для предотвращения вызова 1-го попапа при нажатии ENTER главного пина
     mapPinMain.addEventListener('mousedown', onPinMove); // обработчик перетаскивания
   };
 
   // функция активации при ENTER
-  var foo = function (evt) {
+  var onEnterActivateMap = function (evt) {
     if (evt.keyCode === window.util.ENTER_KEYCODE) {
       onPinActivateMap();
     }
@@ -114,7 +113,7 @@
   mapPinMain.addEventListener('mouseup', onPinActivateMap);
 
   // обработчик события на блоке при нажатии ENTER
-  mapPinMain.addEventListener('keydown', foo);
+  mapPinMain.addEventListener('keydown', onEnterActivateMap);
 
   // обработчик события закрытия попапа и убирает активный класса при ESC
   document.addEventListener('keydown', window.showCard.onPopupEscPress);
