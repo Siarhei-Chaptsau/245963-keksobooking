@@ -69,13 +69,13 @@
     return valuesKeys;
   };
 
-  var onPriceSynchronizeWithAccommodation = function () {
+  var onPricesSynchronizeWithAccommodations = function () {
     window.synchronizeFields(priceForNight, typeOfAccommodation, getValues(keysOfMinPriceForTypes, minPriceForTypes), keysOfMinPriceForTypes, syncValueWithMin);
   };
-  typeOfAccommodation.addEventListener('change', onPriceSynchronizeWithAccommodation);
+  typeOfAccommodation.addEventListener('change', onPricesSynchronizeWithAccommodations);
 
-  // обработчиками валидации введенной суммы
-  priceForNight.addEventListener('invalid', function () {
+  // функция валидации при внесении цены
+  var onPriceValidate = function () {
     getBorderColor(priceForNight);
     if (priceForNight.validity.rangeUnderflow) {
       priceForNight.setCustomValidity('Цена жилья ниже рекомендованной');
@@ -87,7 +87,7 @@
       priceForNight.setCustomValidity('');
       resetBorderColor(priceForNight);
     }
-  });
+  };
 
   // ----- обратобчик события соответствия кол-ва комнат и мест ----- //
 
@@ -145,18 +145,18 @@
     window.map.getAddress(); // внесение адрес-координат в форму
     onCapacitiesSynchronizeWithRooms();
     hideMessage();
-    onPriceSynchronizeWithAccommodation(); // синхронизация цены и типа жилья
+    onPricesSynchronizeWithAccommodations(); // синхронизация цены и типа жилья
   });
 
   noticeForm.addEventListener('submit', function (evt) {
+    evt.preventDefault(); // отменим действие формы по умолчанию
     window.backend.save(new FormData(noticeForm), function () { // добавление данных формы для отправки через добавление в конструктор new FormData()
+      priceForNight.addEventListener('invalid', onPriceValidate); // обработчик валидации введенной суммы при отправке формы
       successSending(); // уведомление об успешной отправке формы
       noticeForm.reset(); // при успешной загрузке данных на сервер сбрасывем значений формы
-      priceForNight.setCustomValidity('');
       onCapacitiesSynchronizeWithRooms();
-      onPriceSynchronizeWithAccommodation(); // синхронизация цены и типа жилья
+      onPricesSynchronizeWithAccommodations(); // синхронизация цены и типа жилья
       window.map.getAddress(); // внесение адрес-координат в форму
     }, window.backend.errorHandler);
-    evt.preventDefault(); // отменим действие формы по умолчанию
   });
 })();
