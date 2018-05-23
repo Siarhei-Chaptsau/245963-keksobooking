@@ -2,7 +2,7 @@
 
 // модуль функций для работаты с сервером данных
 (function () {
-  var SERVER_URL = 'https://1510.dump.academy/keksobooking';
+  var SERVER_URL = 'dump/server.json';
   var divMessage = document.createElement('div');
 
   // Функция загрузки данных при успешном результате
@@ -67,7 +67,7 @@
 
     load: function (onLoad, onError) { // метод для загрузки данных
       var xhr = setup(onLoad, onError);
-      xhr.open('GET', SERVER_URL + '/data');
+      xhr.open('GET', SERVER_URL);
       xhr.send();
     },
 
